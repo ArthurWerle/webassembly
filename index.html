@@ -1,20 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WebAssembly Example</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebAssembly Example</title>
 </head>
 <body>
-  <script>
-    (async () => {
-      const response = await fetch('example.wasm');
-      const bytes = await response.arrayBuffer();
-      const { instance } = await WebAssembly.instantiate(bytes);
-      
-      const result = instance.exports.add(4, 5);
-      console.log('Result:', result); // Should log 9
-    })();
-  </script>
+    <script>
+        (async () => {
+            // Load Rust-compiled WebAssembly module
+            const rustResponse = await fetch('example-rust.wasm');
+            const rustBytes = await rustResponse.arrayBuffer();
+            const { instance: rustInstance } = await WebAssembly.instantiate(rustBytes);
+            
+            // Call function from Rust-compiled module
+            const rustResult = rustInstance.exports.add(4, 5);
+            console.log('Rust Result:', rustResult); // Should log 9
+
+            // Load C++-compiled WebAssembly module
+            // const cppResponse = await fetch('example-cpp.wasm');
+            // const cppBytes = await cppResponse.arrayBuffer();
+            // const { instance: cppInstance } = await WebAssembly.instantiate(cppBytes);
+            
+            // // Call function from C++-compiled module
+            // const cppResult = cppInstance.exports.add(4, 5);
+            // console.log('C++ Result:', cppResult); // Should log 9
+        })();
+    </script>
 </body>
 </html>
